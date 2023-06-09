@@ -20,8 +20,8 @@ public class Matrice2D {
 			set(i,i,1.0);
 		}
 	}
-	public void ajouterRelationsBords(Forme2D forme, Point[] bords){
-		
+	public void ajouterRelationsBords(Forme forme, Point[] bords){
+		/* TODO */
 	}
 	#endregion
 	#region Getters
