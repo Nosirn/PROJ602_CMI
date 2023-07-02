@@ -29,7 +29,13 @@ public class Arete
 			if (p1.getX() == objArete.getP1().getX())
 			{
 				// On teste le reste
-				if (p1.getY() == objArete.getP1().getY() && p1.getZ() == objArete.getP1().getZ() && p2.getX() == objArete.getP2().getX() && p2.getY() == objArete.getP2().getY() && p2.getZ() == objArete.getP2().getZ()) return true;
+				if (
+					p1.getY() == objArete.getP1().getY() &&
+					p1.getZ() == objArete.getP1().getZ() &&
+					p2.getX() == objArete.getP2().getX() &&
+					p2.getY() == objArete.getP2().getY() &&
+					p2.getZ() == objArete.getP2().getZ()
+				) return true;
 			}
 			// notre p1 = obj p2 (Sens inverse)
 			if (p1.getX() == objArete.getP2().getX())

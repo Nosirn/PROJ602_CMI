@@ -10,16 +10,13 @@ public class Forme
 	private Point[] positions;
 	private Arete[] aretes;
 	private Polygone[] surfaces;
+
+	public Point[] Positions { get => positions; set => positions = value; }
+	public Arete[] Aretes { get => aretes; set => aretes = value; }
+	public Polygone[] Surfaces { get => surfaces; set => surfaces = value; }
 	#endregion
 
-	#region Constructors
-	public Forme(Polygone[] srfc, Arete[] art, Point[] pos)
-	{
-		surfaces = srfc;
-		aretes = art;
-		positions = pos;
-	}
-
+	#region Constructor
 	public Forme(string path)
 	{
 		string? line;
@@ -57,6 +54,28 @@ public class Forme
 		{
 			Console.WriteLine("Exception: " + e.Message);
 		}
+
+		Console.WriteLine("===== SURFACES =====");
+		foreach (var item in surfacesList)
+		{
+			Console.WriteLine(item);
+		}
+		Console.WriteLine("====================");
+		Console.WriteLine();
+		Console.WriteLine("====== ARETES ======");
+		foreach (var item in aretesList)
+		{
+			Console.WriteLine(item);
+		}
+		Console.WriteLine("====================");
+		Console.WriteLine();
+		Console.WriteLine("====== POINTS ======");
+		foreach (var item in pointsList)
+		{
+			Console.WriteLine(item);
+		}
+		Console.WriteLine("====================");
+		Console.WriteLine();
 
 		/* Affectations */
 		surfaces = surfacesList.ToArray();
@@ -118,25 +137,44 @@ public class Forme
 	}
 	private void addEdgesAndSurfaces(List<Point> listPts, ref List<Arete> listA, ref List<Polygone> listP, string[] faces)
 	{
+		// On souhaite ajouter les arêtes et faces (surfaces)
+		// Pour cela, on va chercher les points dans chaque face
+		// On crée la liste de points
 		int[] listPoints = new int[faces.Length];
+
+		// Insérer à l'index n le point trouvé
 		int nbPoints = 0;
+
 		// Notation point/normale/texture (ex : 1/2/3 2/3/4 3/4/5)
 		if (Regex.IsMatch(faces[0], "^[0-9]*/"))
 			foreach (string point in faces)
+				// On récupère l'index du point qui se trouve au début de chaque séquence [a]/b/c
 				listPoints[nbPoints++] = Convert.ToInt32(point.Split("/")[0]);
+		
 		// Notation point uniquement (ex : 1 2 3)
 		else
 			foreach (string point in faces)
+				// On récupère directement l'index du point
 				listPoints[nbPoints++] = Convert.ToInt32(point);
 
 		List<Arete> listAretes = new List<Arete>();
 
-		for (int i = 0; i < faces.Length - 1; i++)
+		// n points = n arêtes
+		// Les .obj numérotent les index à partir de 1, donc on soustrait 1 à l'index
+		for (int i = 0; i < nbPoints; i++)
 		{
+			if(i == nbPoints - 1){
+				listAretes.Add(
+					new Arete(
+						listPts.ElementAt(listPoints[i] - 1),
+						listPts.ElementAt(listPoints[0] - 1)
+					)
+				);
+			} else
 			listAretes.Add(
 				new Arete(
 					listPts.ElementAt(listPoints[i] - 1),
-					listPts.ElementAt(listPoints[i + 1] - 1)
+					listPts.ElementAt(listPoints[i+1] - 1)
 				)
 			);
 		}
@@ -144,8 +182,14 @@ public class Forme
 		// Ajout des arêtes dans le polygone
 		foreach (Arete a in listAretes)
 		{
-			if (!listA.Contains(a)) listA.Add(a);
+			if (!listA.Contains(a)) {
+				listA.Add(a);
+			}
 		}
+
+		Console.WriteLine("_____ DEBUG _____");
+		listA.ForEach(arete => Console.WriteLine(arete));
+		Console.WriteLine("_________________");
 
 		// Ajout d'un polygone dans la liste
 		listP.Add(new Polygone(listAretes.ToArray()));

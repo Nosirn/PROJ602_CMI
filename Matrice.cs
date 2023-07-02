@@ -4,20 +4,20 @@ public class Matrice2D {
 	#region Class attributes
 	private readonly int NB_COLONNES;
 	private readonly int NB_LIGNES;
-	private double[,] data;
+	private int[,] data;
 	#endregion
 	#region Constructors
 	public Matrice2D(int nbLignes, int nbColonnes){
 		NB_COLONNES = nbColonnes;
 		NB_LIGNES = nbLignes;
-		data = new double[getRowCount(),getColumnCount()];
+		data = new int[getRowCount(),getColumnCount()];
 	}
 	#endregion
 	#region Class methods
 	public void ajouterIdentite(int nbbords){
 		/* Matrice identité sur les bords*/
 		for(int i = 0; i < nbbords; i++){
-			set(i,i,1.0);
+			set(i,i,1);
 		}
 	}
 	public void ajouterRelationsBords(Forme forme, Point[] bords){
@@ -48,19 +48,19 @@ public class Matrice2D {
 	public int getColumnCount() => NB_COLONNES;
 	#endregion
 	#region Setters
-	public void set(int indexColonne, int indexLigne, double value) => data[indexLigne, indexColonne] = value;
+	public void set(int indexColonne, int indexLigne, int value) => data[indexLigne, indexColonne] = value;
 	#endregion
 	#region ToString
 	public override string ToString(){
-		string res = "╔" + string.Join("", Enumerable.Repeat("════╦",getColumnCount() - 1)) + "════╗\r\n";
+		string res = "+" + string.Join("", Enumerable.Repeat("----+",getColumnCount())) + "\r\n";
 		for(int ligne = 0; ligne < getRowCount(); ligne++){
-			res += "║";
+			res += "|";
 			for(int colonne = 0; colonne < getColumnCount(); colonne++){
-				res += data[ligne,colonne].ToString("00.0") + "║";
+				res += data[ligne,colonne].ToString("0000") + "|";
 			}
 			res += "\r\n"; 
-			if(ligne != getRowCount() - 1) res += "╠" + string.Join("", Enumerable.Repeat("════╬",getColumnCount() - 1)) + "════╣\r\n";
-			else res += "╚" + string.Join("", Enumerable.Repeat("════╩",getColumnCount() - 1)) + "════╝";
+			if(ligne != getRowCount() - 1) res += "+" + string.Join("", Enumerable.Repeat("----+",getColumnCount()))  + "\r\n";
+			else res += "+" + string.Join("", Enumerable.Repeat("----+",getColumnCount()))  + "\r\n";
 		}
 		return res;
 	}

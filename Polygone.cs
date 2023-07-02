@@ -45,7 +45,7 @@ public class Polygone
 			return true;
 		} else return false;
 	}
-	
+
 	public override int GetHashCode(){
 		return base.GetHashCode();
 	}
